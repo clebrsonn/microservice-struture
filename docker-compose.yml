@@ -1,0 +1,23 @@
+version: '3'
+services:
+  discovery:
+    build: service discovery/.
+    ports:
+      - "8761:8761"
+  cloud-config:
+    build: cloud-config/.
+    ports:
+      - "8888:8888"
+    links:
+      - discovery
+    depends_on:
+      - discovery
+  gateway:
+    build: gateway/.
+    ports:
+      - "8080:8080"
+    links:
+      - discovery
+    depends_on:
+      - discovery
+      - cloud-config
