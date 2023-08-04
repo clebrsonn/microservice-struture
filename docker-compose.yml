@@ -8,10 +8,14 @@ services:
     build: cloud-config/.
     ports:
       - "8888:8888"
+    volumes:
+      - ./config-repo:/config-repo
     links:
       - discovery
     depends_on:
       - discovery
+    environment:
+      - EUREKA_SERVER_URI=http://discovery:8761/eureka
   gateway:
     build: gateway/.
     ports:
@@ -21,3 +25,6 @@ services:
     depends_on:
       - discovery
       - cloud-config
+    environment:
+      - EUREKA_SERVER_URI=http://discovery:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://cloud-config:8888
